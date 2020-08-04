@@ -1,0 +1,10 @@
+<component name="ArtifactManager">
+  <artifact type="javafx" name="2D parkour">
+    <output-path>$PROJECT_DIR$/out/artifacts/2D_parkour</output-path>
+    <root id="root">
+      <element id="archive" name="2D_parkour.jar">
+        <element id="module-output" name="2D parkour" />
+      </element>
+    </root>
+  </artifact>
+</component>
