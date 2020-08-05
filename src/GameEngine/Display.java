@@ -9,7 +9,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
-
 public class Display {
 	private int count = 0;
 	private int NFTB = 1;
@@ -23,12 +22,15 @@ public class Display {
     private JButton level3;
     private JButton level4;
     private JButton level5;
-    
+    private int fps = 1;
+    private int c;
     private boolean InMenu = false;
 public JFrame Window;
 public Boolean CloseRequested = false;
 private boolean isInMidAir = false;
 JPanel content;
+private int secondsElapsedSinceLastFrame = 0;
+private String proformace;
    public int orginX = 0;
     public int orginY = 0;
     private String levelDirectory = "Resources/levels/";
@@ -58,39 +60,44 @@ Window = new JFrame("JumpRun - beta1");
 Window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
 content = new JPanel(){
+	
 
     public void paint(Graphics g) {
-    	g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
-    	g.drawString("Controls: space -> jump | escape -> return to main menu -> p - pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
+    	
     	if(screenName.equals("level")) {
-        if(orginY == 0){
-        	
+    		if(orginY > 0 & !FP){
+    	    	
+    			
+    			   
+    	        VS--;
+    	 
+    	    }
+    		 if(FP){
+    	        VS--;
+    	    }
+
+    		orginY +=VS/20; 
+        	if(orginY == 0) {
         	
         for(int i = 0; i < FTB.length; i++) {
-            if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i]) {
+            if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i] ) {
                 FP = true;
                 break;
             
-        }}
-      }
+        }}}
+      
        
         g.drawImage(Player, 750, 150, Window);
-        orginY += VS;
-        if(orginY > 0 & !FP){
-            VS--;
-
-        }
+       
+        
+       
         if(orginY == 0 & !FP){
 
             VS = 0;
             isInMidAir = false;
-
-
+            	orginY = 0;
         }
-        if(FP){
-            VS--;
-        }
-
+       
 
     for(int i = 0; i < B.length; i++){
 
@@ -103,12 +110,13 @@ content = new JPanel(){
             }
         }
 
+	
+	 
+	if(!FP) {
+		orginX-=2;
+	}
+	
 
-
-if(!FP) {
-orginX-=25;
-
-}
 
 if(orginX < -74500) {
 
@@ -122,7 +130,10 @@ if(orginY < -200) {
 	gameOver = true;
 	
 }
-    	}
+    	
+    	g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
+    	g.drawString("Controls: space -> jump | escape -> return to main menu -> p - pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
+    }
     }
 };
 content.setPreferredSize(new Dimension(1500, 750));
@@ -244,15 +255,16 @@ level5.addActionListener(new ActionListener() {
             
             public void keyPressed(KeyEvent e) {
 
-            if(e.getKeyCode() == KeyEvent.VK_SPACE)
+            if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             
                 if(!isInMidAir & !FP ) {
+                	
                 	isInMidAir = true;
-                    VS += 5;
+                    VS += 40;
                     
                 }
-            
-            
+            }
+           
             if(e.getKeyCode() == KeyEvent.VK_P) {
             	if(paused == false) {
             		paused = true;
@@ -286,9 +298,18 @@ level5.addActionListener(new ActionListener() {
 }
 
     public void updateDisplay(){
+    	
+    	long t = System.currentTimeMillis();
+    	
+      
+        
+        
+    	
+
     	if(!paused & !gameOver) {
         this.Window.repaint();
     	}
+    
     	if(screenName.equals("menu")){
     		Play.setVisible(true);
     		Window.add(Play);
@@ -322,6 +343,10 @@ level5.addActionListener(new ActionListener() {
     		Window.remove(level5);
     	}
 
+    	 secondsElapsedSinceLastFrame = (int) (t - System.currentTimeMillis());
+    
+    	 
+    	
     }
 
 public void loadLevel(){
@@ -389,6 +414,7 @@ public void loadLevel(){
 
 
     }
+    
     String g = "grass";
     String d = "dirt";
 for(int i = 0; i < B.length; ){
@@ -401,6 +427,8 @@ for(int i = 0; i < B.length; ){
 i++;
 }
 }
+
 }
+  
 
 
