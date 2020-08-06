@@ -22,6 +22,7 @@ public class Display {
     private JButton level3;
     private JButton level4;
     private JButton level5;
+    private JButton RandogeneratedLevel;
     private int fps = 1;
     private int c;
     private boolean InMenu = false;
@@ -82,13 +83,13 @@ content = new JPanel(){
     		
     		if(orginY == 0) {
     			
-        for(int i = 0; i < FTB.length; i++) {
+        for(int i = 0; i < FTB.length & orginY == 0; i++) {
         	
-            if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i] ) {
+            if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i]  ) {
             
                 FP = true;
                 
-                break;
+               
             
         }}}
       
@@ -134,20 +135,23 @@ content = new JPanel(){
 	
 
 
-if(orginX < -74500) {
+if(orginX < -29000) {
 	
 	g.setFont(new Font(Font.SERIF, Font.PLAIN, 200));
 	
-	g.drawString("completed level", 350, 500);
+	g.drawString("completed level", 150, 500);
 	
 	gameOver = true;
+	  FTB = new int[10000];
+	    FTE = new int[10000];
 }
 if(orginY < -200) {
 	
 	g.setFont(new Font(Font.SERIF, Font.PLAIN, 200));
 	
 	g.drawString("failed level", 350, 500);
-	
+	  FTB = new int[10000];
+	    FTE = new int[10000];
 	
 	gameOver = true;
 	
@@ -156,7 +160,7 @@ if(orginY < -200) {
     	
     	g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
     	
-    	g.drawString("Controls: space -> jump | escape -> return to main menu -> p - pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
+    	g.drawString("Controls: space -> jump | escape -> return to main menu | p -> pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
     }
     
     
@@ -190,9 +194,11 @@ level1.addActionListener(new ActionListener() {
 	@Override
 	public void actionPerformed(ActionEvent e) {
 		if(e.getSource() == level1) {
-			screenName = "level";
 			levelNumber = "1";
 			loadLevel();
+			screenName = "level";
+			
+			
 			
 		}
 		
@@ -262,7 +268,23 @@ level5.addActionListener(new ActionListener() {
 		
 	}
 });
-
+RandogeneratedLevel = new JButton("Random Generated level");
+RandogeneratedLevel.setSize(250, 75);
+RandogeneratedLevel.setLocation(625, 600);
+RandogeneratedLevel.addActionListener(new ActionListener() {
+	
+	@Override
+	public void actionPerformed(ActionEvent e) {
+		GenerateRandomLevel();
+		if(e.getSource() == RandogeneratedLevel) {
+			screenName = "level";
+			levelNumber = "";
+			
+			
+		}
+		
+	}
+});
         Window.addWindowListener(new WindowAdapter() {
 
             @Override
@@ -319,7 +341,7 @@ level5.addActionListener(new ActionListener() {
        level3.setFocusable(false);
        level4.setFocusable(false);
        level5.setFocusable(false);
-      
+       RandogeneratedLevel.setFocusable(false);
 }
 
     public void updateDisplay(){
@@ -354,6 +376,7 @@ level5.addActionListener(new ActionListener() {
     		Window.add(level3);
     		Window.add(level4);
     		Window.add(level5);
+    		Window.add(RandogeneratedLevel);
     	}else {
     		level1.setVisible(false);
     		level2.setVisible(false);
@@ -366,20 +389,21 @@ level5.addActionListener(new ActionListener() {
     		Window.remove(level3);
     		Window.remove(level4);
     		Window.remove(level5);
+    		Window.remove(RandogeneratedLevel);
     	}
 
     	 secondsElapsedSinceLastFrame = (int) (t - System.currentTimeMillis());
-    
+   
     	 
     	
     }
 
 public void loadLevel(){
-    File LB = new File(levelDirectory + screenName + levelNumber + "/Level.block");
-    File LX = new File(levelDirectory + screenName + levelNumber + "/Level.x");
-    File LY = new File(levelDirectory + screenName + levelNumber + "/Level.y");
-    File FB = new File(levelDirectory + screenName + levelNumber + "/Level.ftb");
-    File FE = new File(levelDirectory + screenName + levelNumber + "/Level.fte");
+    File LB = new File(levelDirectory + "level" + levelNumber + "/Level.block");
+    File LX = new File(levelDirectory + "level"  + levelNumber + "/Level.x");
+    File LY = new File(levelDirectory + "level"  + levelNumber + "/Level.y");
+    File FB = new File(levelDirectory + "level"  + levelNumber + "/Level.ftb");
+    File FE = new File(levelDirectory + "level"  + levelNumber + "/Level.fte");
     Scanner FR1 = null;
     try {
         FR1 = new Scanner(LB);
@@ -452,7 +476,49 @@ for(int i = 0; i < B.length; ){
 i++;
 }
 }
+private void GenerateRandomLevel() {
+	int x = 0;
+	int y = 225;
+	int i = 0;
+	int max = (int) (Math.random() * (20 - 1 + 1) + 1);
+	while (x < 30000) {
+        int c = (int) (Math.random() * (max - 1 + 1) + 1);
+        if (y == 225) {
+            B[i] = "grass";
+        } else if (y > 225) {
+        	B[i] = "dirt";
+        }
+        X[i] = x;
+        Y[i] = y;
+        if (y < 750) {
+            y += 75;
+        } else if (y == 750 && c == 1 && x>= 1000) {
+        	FTB[i] = x + 37;
+         FTE[i]  = x +225 - 37;
+            y = 225;
+            x += 225;
+        } else if (y == 750) {
+            y = 225;
+            x += 75;
+          
+    	
+    	   
+    	
+        }
+        String g = "grass";
+	    String d = "dirt";
+        String block = B[i];
+ 	   if(g.equals(block)) {
+ 	       TFG[i] = true;
+ 	   }else  if(d.equals(block)) {
+ 	       TFD[i] = true;
+ 	   }
 
+i++;
+
+    }
+	   
+}
 }
   
 
