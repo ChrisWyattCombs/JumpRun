@@ -52,8 +52,8 @@ private String proformace;
     public boolean gameOver = false;
     private String levelNumber = "";
     public Display() throws IOException {
+    
     }
-   
 
     public void OpenDisplay(){
 Window = new JFrame("JumpRun - beta1");
@@ -65,76 +65,101 @@ content = new JPanel(){
     public void paint(Graphics g) {
     	
     	if(screenName.equals("level")) {
+    		
     		if(orginY > 0 & !FP){
     	    	
-    			
+    		
     			   
     	        VS--;
-    	 
-    	    }
+    	         }
     		 if(FP){
+    			
     	        VS--;
+    	      
     	    }
 
-    		orginY +=VS/20; 
-        	if(orginY == 0) {
-        	
+    		orginY +=VS; 
+    		
+    		if(orginY == 0) {
+    			
         for(int i = 0; i < FTB.length; i++) {
+        	
             if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i] ) {
+            
                 FP = true;
+                
                 break;
             
         }}}
       
-       
+    		
         g.drawImage(Player, 750, 150, Window);
-       
         
        
         if(orginY == 0 & !FP){
+        
 
             VS = 0;
+           
             isInMidAir = false;
+          
             	orginY = 0;
-        }
+             }
        
 
     for(int i = 0; i < B.length; i++){
+	
 
             if(TFG[i]) {
+            	
                 g.drawImage(grass,orginX + X[i],orginY + Y[i], Window);
+                
 
             }else if (TFD[i]){
+            	
                 g.drawImage(dirt,orginX + X[i], orginY + Y[i], Window);
-
+               
             }
-        }
+    }
+    
+        
 
 	
 	 
 	if(!FP) {
-		orginX-=2;
+		
+		orginX-=20;
+		
 	}
 	
 
 
 if(orginX < -74500) {
-
+	
 	g.setFont(new Font(Font.SERIF, Font.PLAIN, 200));
+	
 	g.drawString("completed level", 350, 500);
+	
 	gameOver = true;
 }
 if(orginY < -200) {
+	
 	g.setFont(new Font(Font.SERIF, Font.PLAIN, 200));
+	
 	g.drawString("failed level", 350, 500);
+	
+	
 	gameOver = true;
 	
-}
+	
+}}
     	
     	g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
+    	
     	g.drawString("Controls: space -> jump | escape -> return to main menu -> p - pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
     }
-    }
+    
+    
 };
 content.setPreferredSize(new Dimension(1500, 750));
 Window.getContentPane().add(content);
@@ -260,7 +285,7 @@ level5.addActionListener(new ActionListener() {
                 if(!isInMidAir & !FP ) {
                 	
                 	isInMidAir = true;
-                    VS += 40;
+                    VS += 5;
                     
                 }
             }
