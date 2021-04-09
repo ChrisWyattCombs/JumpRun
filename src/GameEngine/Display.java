@@ -102,10 +102,23 @@ private boolean VSLOCKDone = false;
     				}
     				
     	    		orginY +=VS; 
+    	    		
+    	    		
     	    		if(VSLOCKDone) {
     	    			VSLOCK =false;
     	    			VSLOCKDone = false;
     	    		}
+    	    		if(orginY == 0) {
+    	    			
+    	    	        for(int i = 0; i < FTB.length & orginY == 0; i++) {
+    	    	        	
+    	    	            if (750-37> orginX + FTB[i] & 750 < orginX + FTE[i]  ) {
+    	    	            
+    	    	                FP = true;
+    	    	                
+    	    	               
+    	    	            
+    	    	        }}}
     			if(!FP) {
     				
     				orginX-=2;
@@ -154,7 +167,7 @@ content = new JPanel(){
 
     		/*orginY +=VS; */
     		
-    		if(orginY == 0) {
+    		/**if(orginY == 0) {
     			
         for(int i = 0; i < FTB.length & orginY == 0; i++) {
         	
@@ -164,7 +177,7 @@ content = new JPanel(){
                 
                
             
-        }}}
+        }}}*/
       
     		
         g.drawImage(Player, 750, 150, Window);
