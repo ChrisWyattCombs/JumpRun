@@ -10,6 +10,8 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Scanner;
 public class Display {
+	
+	private boolean multiplayer = false;
 	private int count = 0;
 	private int NFTB = 1;
 	private int NFTE = 1;
@@ -22,6 +24,8 @@ public class Display {
     private JButton level3;
     private JButton level4;
     private JButton level5;
+    private boolean MP = false;
+    private int VSCount = 0;
     private JButton RandogeneratedLevel;
     private int fps = 1;
     private int c;
@@ -30,8 +34,10 @@ public JFrame Window;
 public Boolean CloseRequested = false;
 private boolean isInMidAir = false;
 JPanel content;
+private boolean VSLOCK = false;
 private int secondsElapsedSinceLastFrame = 0;
 private String proformace;
+private boolean VSLOCKDone = false;
    public int orginX = 0;
     public int orginY = 0;
     private String levelDirectory = "Resources/levels/";
@@ -57,8 +63,75 @@ private String proformace;
     }
 
     public void OpenDisplay(){
-Window = new JFrame("JumpRun - beta1");
+    	Thread Movement = new Thread() {
+    		public void run() {
+    			//System.out.println("works 1");
+    			while(true) {
+    			
+    				System.out.println("this is printed to keep the game runing");
+    				if(!paused & !gameOver) {
+    			if(screenName.equals("level")) {
+    				
+    				if(!VSLOCK) {
+    				if(orginY > 0 & !FP){
+    	    	    	
+    		    		
+    	    			   if(VSCount == 0) {
+    	    	        VS--;
+    	    	        VSCount++;
+    	    			   }else {
+    	    				   VSCount++;
+    	    				   if(VSCount == 12) {
+    	    					   VSCount = 0;
+    	    				   }
+    	    			   }
+    	    	         }
+    				else if(FP){
+    	    			
+    					if(VSCount == 0) {
+        	    	        VS--;
+        	    	        VSCount++;
+        	    			   }else {
+        	    				   VSCount++;
+        	    				   if(VSCount == 12) {
+        	    					   VSCount = 0;
+        	    				   }
+        	    			   }
+    	    	      
+    	    	    }
+    				}
+    				
+    	    		orginY +=VS; 
+    	    		if(VSLOCKDone) {
+    	    			VSLOCK =false;
+    	    			VSLOCKDone = false;
+    	    		}
+    			if(!FP) {
+    				
+    				orginX-=2;
+    				
+    				
+    			}
+    			
+    			try {
+    				Thread.sleep(1000/200);
+    			} catch (InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
+    				}
+    				}
+    			}
+    			}
+    			
+    			
+    		
+
+    	};
+    	Movement.start();
+Window = new JFrame("JumpRun - beta6");
 Window.setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
+
 
 content = new JPanel(){
 	
@@ -66,7 +139,7 @@ content = new JPanel(){
     public void paint(Graphics g) {
     	
     	if(screenName.equals("level")) {
-    		
+    		/*
     		if(orginY > 0 & !FP){
     	    	
     		
@@ -77,9 +150,9 @@ content = new JPanel(){
     			
     	        VS--;
     	      
-    	    }
+    	    }*/
 
-    		orginY +=VS; 
+    		/*orginY +=VS; */
     		
     		if(orginY == 0) {
     			
@@ -96,7 +169,7 @@ content = new JPanel(){
     		
         g.drawImage(Player, 750, 150, Window);
         
-       
+      if(!VSLOCK) {
         if(orginY == 0 & !FP){
         
 
@@ -107,10 +180,10 @@ content = new JPanel(){
             	orginY = 0;
              }
        
-
+      }
     for(int i = 0; i < B.length; i++){
 	
-
+if(!(orginX + X[i] +1250 < 1000 || orginX + X[i]+1250  < -1000)) {
             if(TFG[i]) {
             	
                 g.drawImage(grass,orginX + X[i],orginY + Y[i], Window);
@@ -121,18 +194,19 @@ content = new JPanel(){
                 g.drawImage(dirt,orginX + X[i], orginY + Y[i], Window);
                
             }
+}
     }
     
         
 
 	
 	 
-	if(!FP) {
+	/*if(!FP) {
 		
 		orginX-=20;
 		
 	}
-	
+	*/
 
 
 if(orginX < -29000) {
@@ -156,11 +230,14 @@ if(orginY < -200) {
 	gameOver = true;
 	
 	
-}}
+}
+
+    	
+    	}
     	
     	g.setFont(new Font(Font.SERIF, Font.PLAIN, 15));
     	
-    	g.drawString("Controls: space -> jump | escape -> return to main menu | p -> pause/unpause(if you press escape and the main menu does not return, unpause your game ", 50, 50);
+    	g.drawString("Controls: space -> jump | escape -> return to main menu | p -> pause/unpause(if you press escape and the main menu does not return, unpause your game) ", 50, 50);
     }
     
     
@@ -171,7 +248,7 @@ Window.pack();
 Window.setVisible(true);
 Window.setResizable(false);
 Window.setBackground(new Color(135, 206,235));
-Play = new JButton("Play");
+Play = new JButton("Singleplayer");
 Play.setSize(250, 75);
 Play.setLocation(625, 100);
 Play.addActionListener(new ActionListener() {
@@ -289,12 +366,14 @@ RandogeneratedLevel.addActionListener(new ActionListener() {
 
             @Override
             public void windowClosing(WindowEvent e) {
+            	
                 CloseRequested = true;
+                Movement.stop();
             }
 
             @Override
             public void windowClosed(WindowEvent e) {
-
+            	
             }
 
         });
@@ -305,9 +384,10 @@ RandogeneratedLevel.addActionListener(new ActionListener() {
             if(e.getKeyCode() == KeyEvent.VK_SPACE) {
             
                 if(!isInMidAir & !FP ) {
-                	
+                	VSLOCK = true;
                 	isInMidAir = true;
-                    VS += 5;
+                    VS = 4;
+                    VSLOCKDone = true;
                     
                 }
             }
@@ -315,8 +395,10 @@ RandogeneratedLevel.addActionListener(new ActionListener() {
             if(e.getKeyCode() == KeyEvent.VK_P) {
             	if(paused == false) {
             		paused = true;
+            		MP = true;
             	}else if(paused == true){   
             		paused = false;
+            		MP = false;
             	}
             	}
             if(e.getKeyCode() == KeyEvent.VK_ESCAPE) {
